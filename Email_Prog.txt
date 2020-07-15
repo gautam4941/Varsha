@@ -1,0 +1,56 @@
+import smtplib
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+# me == my email address
+# you == recipient's email address
+me = "binay.aditya@chubb.com"
+you = "binay.aditya@chubb.com"
+
+# Create message container - the correct MIME type is multipart/alternative.
+msg = MIMEMultipart('alternative')
+msg['Subject'] = "Advice and guidance smoke test"
+msg['From'] = me
+msg['To'] = you
+
+html = """\
+<html>
+	<head>
+		<style> 
+			table, th, td {
+			  border: 1px solid black;
+			}
+		</style>
+	</head>
+<body>
+	<h2>          Email Automation Testing     </h2>
+	<p>This notification is triggered upon successful completion of various smokes tests designed to confirm the functionality of the application:\n\n</p>
+
+	<table style="width:25%">
+	<tr>
+		<th><p><font color="red">ADITYA_BINAY</th>
+		<th><p><font color="red">Message</p></th>
+    </tr>
+	html+=f"""
+    </tr>
+    <td>1</td>
+    <td><p><font color="red">Hello Megha</p></td>
+    </tr>
+html +=  "</table></body>"
+
+# Record the MIME types of both parts - text/plain and text/html.
+part1 = MIMEText(html, 'html')
+
+# Attach parts into message container. According to RFC 2046, the last part of a multipart message, in this case
+# the HTML message, is best and preferred.
+msg.attach(part1)
+
+# Send the message via local SMTP server.
+s = smtplib.SMTP('smtp.gwl.com')
+
+# sendmail function takes 3 arguments: sender's address, recipient's address
+# and message to send - here it is sent as one string.
+s.sendmail(me, you, msg.as_string())
+s.quit()
+
